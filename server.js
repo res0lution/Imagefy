@@ -13,12 +13,22 @@ const typeDefs = gql`
   type Query {
     getTodos: [Todo]
   }
+  type Mutation {
+    addTodo(task: String, completed: Boolean): Todo
+  }
 `;
 
 const resolvers = {
   Query: {
     getTodos: () => {
       return todos;
+    },
+  },
+  Mutation: {
+    addTodo: (_, args) => {
+      const todo = { task: args.task, completed: args.completed };
+      todos.push(todo);
+      return todo;
     },
   },
 };
