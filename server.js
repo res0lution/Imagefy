@@ -1,29 +1,15 @@
 const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
 const User = require("./models/User");
 const Post = require("./models/Post");
-const fs = require("fs");
-const path = require("path");
+const resolvers = require("./resolvers");
 require("dotenv").config({ path: "./.env" });
 
 const filePath = path.join(__dirname, "typeDefs.gql");
 const typeDefs = fs.readFileSync(filePath, "utf-8");
-
-const resolvers = {
-  Query: {
-    getTodos: () => {
-      return todos;
-    },
-  },
-  Mutation: {
-    addTodo: (_, args) => {
-      const todo = { task: args.task, completed: args.completed };
-      todos.push(todo);
-      return todo;
-    },
-  },
-};
 
 const server = new ApolloServer({
   typeDefs,
