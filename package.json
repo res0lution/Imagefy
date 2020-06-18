@@ -1,0 +1,36 @@
+{
+  "name": "imagefy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Res01uti0n/Imagefy.git"
+  },
+  "keywords": [
+    "vue",
+    "graphql"
+  ],
+  "author": "resolution",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Res01uti0n/Imagefy/issues"
+  },
+  "homepage": "https://github.com/Res01uti0n/Imagefy#readme",
+  "dependencies": {
+    "apollo-server": "^2.15.0",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.2.1",
+    "mongoose": "^5.9.19"
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "nodemon": "^2.0.4"
+  }
+}
