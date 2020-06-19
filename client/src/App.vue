@@ -15,7 +15,17 @@
 
       <v-list nav dense>
         <v-list-item-group color="primary">
-          <v-list-item v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
+          <v-list-item v-for="item in sideNavItems" :key="item.title" :to="item.link">
+            <v-list-item-icon>
+              <v-icon v-text="item.icon"></v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item v-if="user">
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -52,6 +62,15 @@
             <v-icon left class="hidden-sm-only">{{item.icon}}</v-icon>
             {{item.title}}
           </v-btn>
+
+          <v-btn text to="/profile" v-if="user">
+            <v-icon class="hidden-sm-only" left>account_box</v-icon>
+            <v-badge right color="blue darken-2">Profile</v-badge>
+          </v-btn>
+
+          <v-btn text v-if="user" @click="handleSignoutUser">
+            <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>Signout
+          </v-btn>
         </v-toolbar-items>
       </v-toolbar>
     </div>
@@ -67,6 +86,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "App",
   data() {
@@ -75,18 +96,43 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["user"]),
     horizontalNavItems() {
-      return [
+      let items = [
         { icon: "mdi-chat", title: "Posts", link: "/posts" },
         { icon: "mdi-login", title: "Sign In", link: "/signin" },
         { icon: "mdi-account-plus", title: "Sign up", link: "/signup" }
       ];
+
+      if (user) {
+        items = [{ icon: "mdi-chat", title: "Posts", link: "/posts" }];
+      }
+      return items;
+    },
+    sideNavItems() {
+      let items = [
+        { icon: "mdi-chat", title: "Posts", link: "/posts" },
+        { icon: "mdi-login", title: "Sign In", link: "/signin" },
+        { icon: "mdi-account-plus", title: "Sign up", link: "/signup" }
+      ];
+
+      if (this.user) {
+        items = [
+          { icon: "mdi-chat", title: "Posts", link: "/posts" },
+          { icon: "mdi-plus", title: "Create Post", link: "/post/add" },
+          { icon: "mdi-account_box", title: "Profile", link: "/profile" }
+        ];
+      }
+      return items;
     }
   },
   methods: {
     toggleSideNav() {
       this.sideNav = !this.sideNav;
-    }
+    },
+    handleSignoutUser() {
+      this.$store.dispatch("signoutUser");
+    },
   }
 };
 </script>
