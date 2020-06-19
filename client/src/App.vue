@@ -48,7 +48,7 @@
         ></v-text-field>
 
         <v-toolbar-items class="hidden-xs-only">
-          <v-btn flat v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
+          <v-btn text v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
             <v-icon left class="hidden-sm-only">{{item.icon}}</v-icon>
             {{item.title}}
           </v-btn>
