@@ -21,6 +21,7 @@
               lazy-validation
               ref="form"
               @submit.prevent="handleSignupUser"
+              pa-3
             >
               <v-layout row>
                 <v-flex xs12>
@@ -53,7 +54,7 @@
                   <v-text-field
                     :rules="passwordRules"
                     v-model="password"
-                    prepend-icon="mdi-extension"
+                    prepend-icon="mdi-lock"
                     label="Password"
                     type="password"
                     required
@@ -83,7 +84,7 @@
                     type="submit"
                   >
                     <span slot="loader" class="custom-loader">
-                      <v-icon light>cached</v-icon>
+                      <v-icon light>mdi-loading</v-icon>
                     </span>
                     Signup
                   </v-btn>

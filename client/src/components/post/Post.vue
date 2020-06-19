@@ -7,7 +7,7 @@
             <h1>{{getPost.title}}</h1>
 
             <v-btn @click="handleToggleLike" large icon v-if="user">
-              <v-icon large :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'">favorite</v-icon>
+              <v-icon large :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'">mdi-heart</v-icon>
             </v-btn>
 
             <h3 class="ml-3 font-weight-thin">{{getPost.likes}} LIKES</h3>
@@ -19,12 +19,12 @@
 
           <v-tooltip right>
             <span>Click to enlarge image</span>
-            <v-card-media
+            <v-img
               @click="toggleImageDialog"
               slot="activator"
               :src="getPost.imageUrl"
               id="post__image"
-            ></v-card-media>
+            ></v-img>
           </v-tooltip>
 
           <v-dialog v-model="dialog">
@@ -88,12 +88,12 @@
                 <v-list-item-content>
                   <v-list-item-title>{{message.messageBody}}</v-list-item-title>
 
-                  <v-list-item-sub-title>
+                  <v-list-item-subtitle>
                     {{message.messageUser.username}}
                     <span
                       class="grey--text text--lighten-1 hidden-xs-only"
                     >{{getTimeFromNow(message.messageDate)}}</span>
-                  </v-list-item-sub-title>
+                  </v-list-item-subtitle>
                 </v-list-item-content>
 
                 <v-list-item-action class="hidden-xs-only">
@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     getTimeFromNow(time) {
-      return moment(new Date(time)).fromNow();
+      return moment(Date(time)).fromNow("h");
     },
     checkIfPostLiked(postId) {
       if (
@@ -256,7 +256,7 @@ export default {
               });
 
               data.getPost.messages.unshift(addPostMessage);
-              
+
               cache.writeQuery({
                 query: GET_POST,
                 variables: { postId: this.postId },

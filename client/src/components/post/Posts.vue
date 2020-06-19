@@ -3,7 +3,7 @@
     <v-layout row wrap v-if="infiniteScrollPosts">
       <v-flex xs12 sm6 v-for="post in infiniteScrollPosts.posts" :key="post._id">
         <v-card hover>
-          <v-card-media @click.native="goToPost(post._id)" :src="post.imageUrl" height="30vh" lazy></v-card-media>
+          <v-img @click.native="goToPost(post._id)" :src="post.imageUrl" height="30vh" lazy></v-img>
 
           <v-card-actions>
             <v-card-title primary>
@@ -16,7 +16,7 @@
             <v-spacer></v-spacer>
 
             <v-btn @click="showPostCreator = !showPostCreator" icon>
-              <v-icon>{{`mdi-keyboard_arrow_${showPostCreator ? 'up' : 'down'}`}}</v-icon>
+              <v-icon>{{`mdi-menu-${showPostCreator ? 'up' : 'down'}`}}</v-icon>
             </v-btn>
           </v-card-actions>
 
@@ -30,14 +30,14 @@
                 <v-list-item-content>
                   <v-list-item-title class="text--primary">{{post.createdBy.username}}</v-list-item-title>
 
-                  <v-list-item-sub-title
+                  <v-list-item-subtitle
                     class="font-weight-thin"
-                  >Added {{formatCreatedDate(post.createdDate)}}</v-list-item-sub-title>
+                  >Added {{formatCreatedDate(post.createdDate)}}</v-list-item-subtitle>
                 </v-list-item-content>
 
                 <v-list-item-action class="hidden-xs-only">
                   <v-btn icon ripple>
-                    <v-icon color="grey lighten-1">mdi-info</v-icon>
+                    <v-icon color="grey lighten-1">mdi-information</v-icon>
                   </v-btn>
                 </v-list-item-action>
               </v-list-item>
@@ -87,7 +87,7 @@ export default {
       this.$router.push(`/posts/${postId}`);
     },
     formatCreatedDate(date) {
-      return moment(new Date(date)).format("ll");
+      return moment(Date(date)).format("LL");
     },
     showMorePosts() {
       this.pageNum += 1;

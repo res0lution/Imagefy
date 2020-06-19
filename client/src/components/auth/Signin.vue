@@ -16,28 +16,53 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card color="secondary" dark>
           <v-container>
-            <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleSigninUser">
-
+            <v-form
+              v-model="isFormValid"
+              lazy-validation
+              ref="form"
+              @submit.prevent="handleSigninUser"
+            >
               <v-layout row>
                 <v-flex xs12>
-                  <v-text-field :rules="usernameRules" v-model="username" prepend-icon="face" label="Username" type="text" required></v-text-field>
+                  <v-text-field
+                    :rules="usernameRules"
+                    v-model="username"
+                    prepend-icon="mdi-face"
+                    label="Username"
+                    type="text"
+                    required
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
 
               <v-layout row>
                 <v-flex xs12>
-                  <v-text-field :rules="passwordRules" v-model="password" prepend-icon="extension" label="Password" type="password" required></v-text-field>
+                  <v-text-field
+                    :rules="passwordRules"
+                    v-model="password"
+                    prepend-icon="mdi-lock"
+                    label="Password"
+                    type="password"
+                    required
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
 
               <v-layout row>
                 <v-flex xs12>
-                  <v-btn :loading="loading" :disabled="!isFormValid || loading" color="accent" type="submit">
+                  <v-btn
+                    :loading="loading"
+                    :disabled="!isFormValid || loading"
+                    color="accent"
+                    type="submit"
+                  >
                     <span slot="loader" class="custom-loader">
-                      <v-icon light>cached</v-icon>
+                      <v-icon light>mdi-loading</v-icon>
                     </span>
-                    Signin</v-btn>
-                  <h3>Don't have an account?
+                    Signin
+                  </v-btn>
+                  <h3>
+                    Don't have an account?
                     <router-link to="/signup">Signup</router-link>
                   </h3>
                 </v-flex>

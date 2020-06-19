@@ -27,7 +27,7 @@
 
           <v-list-item v-if="user" @click="handleSignoutUser">
             <v-list-item-icon>
-              <v-icon>mdi-exit</v-icon>
+              <v-icon>mdi-exit-to-app</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -49,6 +49,8 @@
         <v-spacer></v-spacer>
 
         <v-text-field
+          v-model="searchTerm"
+          @input="handleSearchPosts"
           flex
           prepend-icon="mdi-magnify"
           placeholder="Search posts"
@@ -90,8 +92,8 @@
             {{item.title}}
           </v-btn>
 
-          <v-btn flat to="/profile" v-if="user">
-            <v-icon class="hidden-sm-only" left>mdi-account_box</v-icon>
+          <v-btn text to="/profile" v-if="user">
+            <v-icon class="hidden-sm-only" left>mdi-account</v-icon>
 
             <v-badge right color="blue darken-2" :class="{ 'bounce': badgeAnimated }">
               <span slot="badge" v-if="userFavorites.length">{{userFavorites.length}}</span>
@@ -100,7 +102,7 @@
           </v-btn>
 
           <v-btn text v-if="user" @click="handleSignoutUser">
-            <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>Signout
+            <v-icon class="hidden-sm-only" left>mdi-exit-to-app</v-icon>Signout
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -113,10 +115,10 @@
         </transition>
 
         <v-snackbar v-model="authSnackbar" color="success" :timeout="5000" bottom left>
-          <v-icon class="mr-3">mdi-check_circle</v-icon>
+          <v-icon class="mr-3">mdi-check</v-icon>
 
           <h3>You are now signed in!</h3>
-          <v-btn dark flat @click="authSnackbar = false">Close</v-btn>
+          <v-btn dark text @click="authSnackbar = false">Close</v-btn>
         </v-snackbar>
 
         <v-snackbar
@@ -130,7 +132,7 @@
           <v-icon class="mr-3">mdi-cancel</v-icon>
 
           <h3>{{authError.message}}</h3>
-          <v-btn dark flat to="/signin">Sign in</v-btn>
+          <v-btn dark text to="/signin">Sign in</v-btn>
         </v-snackbar>
       </v-container>
     </main>
@@ -151,6 +153,24 @@ export default {
       badgeAnimated: false
     };
   },
+  watch: {
+    user(newValue, oldValue) {
+      if (oldValue === null) {
+        this.authSnackbar = true;
+      }
+    },
+    authError(value) {
+      if (value !== null) {
+        this.authErrorSnackbar = true;
+      }
+    },
+    userFavorites(value) {
+      if (value) {
+        this.badgeAnimated = true;
+        setTimeout(() => (this.badgeAnimated = false), 1000);
+      }
+    }
+  },
   computed: {
     ...mapGetters(["searchResults", "authError", "user", "userFavorites"]),
     horizontalNavItems() {
@@ -160,7 +180,7 @@ export default {
         { icon: "mdi-account-plus", title: "Sign up", link: "/signup" }
       ];
 
-      if (user) {
+      if (this.user) {
         items = [{ icon: "mdi-chat", title: "Posts", link: "/posts" }];
       }
 
@@ -177,7 +197,7 @@ export default {
         items = [
           { icon: "mdi-chat", title: "Posts", link: "/posts" },
           { icon: "mdi-plus", title: "Create Post", link: "/post/add" },
-          { icon: "mdi-account_box", title: "Profile", link: "/profile" }
+          { icon: "mdi-account", title: "Profile", link: "/profile" }
         ];
       }
 

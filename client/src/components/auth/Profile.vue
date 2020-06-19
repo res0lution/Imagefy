@@ -4,7 +4,7 @@
       <v-card class="white--text" color="secondary">
         <v-layout>
           <v-flex xs5>
-            <v-card-media height="125px" contain :src="user.avatar"></v-card-media>
+            <v-img height="125px" contain :src="user.avatar"></v-img>
           </v-flex>
 
           <v-flex xs7>
@@ -40,7 +40,7 @@
       <v-layout row wrap>
         <v-flex xs12 sm6 v-for="favorite in userFavorites" :key="favorite._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-card-media height="30vh" :src="favorite.imageUrl"></v-card-media>
+            <v-img height="30vh" :src="favorite.imageUrl"></v-img>
             <v-card-text>{{favorite.title}}</v-card-text>
           </v-card>
         </v-flex>
@@ -67,14 +67,14 @@
         <v-flex xs12 sm6 v-for="post in userPosts" :key="post._id">
           <v-card class="mt-3 ml-1 mr-2" hover>
             <v-btn @click="loadPost(post)" color="info" floating fab small dark>
-              <v-icon>mdi-edit</v-icon>
+              <v-icon>mdi-pencil</v-icon>
             </v-btn>
 
             <v-btn @click="handleDeleteUserPost(post)" color="error" floating fab small dark>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
 
-            <v-card-media height="30vh" :src="post.imageUrl"></v-card-media>
+            <v-img height="30vh" :src="post.imageUrl"></v-img>
             <v-card-text>{{post.title}}</v-card-text>
           </v-card>
         </v-flex>
@@ -198,7 +198,7 @@ export default {
   },
   methods: {
     formatJoinDate(date) {
-      return moment(new Date(date)).format("ll");
+      return moment(Date(date)).format("LL");
     },
     handleGetUserPosts() {
       this.$store.dispatch("getUserPosts", {

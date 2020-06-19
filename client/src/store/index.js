@@ -92,7 +92,6 @@ export default new Vuex.Store({
         });
     },
     getUserPosts: ({ commit }, payload) => {
-
       apolloClient
         .query({
           query: GET_USER_POSTS,

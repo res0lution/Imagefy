@@ -4,6 +4,7 @@ import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 import Profile from "../components/auth/Profile.vue";
 import Posts from "../components/post/Posts.vue";
+import Post from "../components/post/Post.vue";
 import AddPost from "../components/post/AddPost.vue";
 import Signin from "../components/auth/Signin.vue";
 import Signup from "../components/auth/Signup.vue";
@@ -11,7 +12,7 @@ import AuthGuard from "../utils/AuthGuard";
 
 Vue.use(VueRouter);
 
-routes: [
+const routes = [
   {
     path: "/",
     name: "home",

@@ -3,11 +3,11 @@ import Vue from "vue";
 import ApolloClient from "apollo-boost";
 import VueApollo from "vue-apollo";
 
-import "./plugins/vuetify";
+import vuetify from "@/plugins/vuetify";
 import App from "./App.vue";
 import router from "./router/index";
 import store from "./store/index";
-import FormAlert from "./components/Shared/FormAlert";
+import FormAlert from "./components/shared/FormAlert";
 
 Vue.component("form-alert", FormAlert);
 
@@ -55,6 +55,7 @@ new Vue({
   provide: apolloProvider.provide(),
   router,
   store,
+  vuetify,
   render: (h) => h(App),
   created() {
     this.$store.dispatch("getCurrentUser");
