@@ -1,6 +1,6 @@
 type User {
   _id: ID
-  username: String!
+  username: String! @unique
   email: String!
   password: String!
   avatar: String
@@ -31,9 +31,15 @@ type Token {
   token: String!
 }
 
+type PostsPage {
+  posts: [Post]
+  hasMore: Boolean
+}
+
 type Query {
   getCurrentUser: User
   getPosts: [Post]
+  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 
 type Mutation {
@@ -44,6 +50,6 @@ type Mutation {
     description: String!
     creatorId: ID!
   ): Post!
+  signinUser(username: String!, password: String!): Token
   signupUser(username: String!, email: String!, password: String!): Token
-  signinUser(username: String!, email: String!): Token
 }
