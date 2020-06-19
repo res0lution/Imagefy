@@ -25,13 +25,13 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item v-if="user">
+          <v-list-item v-if="user" @click="handleSignoutUser">
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon>mdi-exit</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title v-text="item.title"></v-list-item-title>
+              <v-list-item-title>Signout</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -57,15 +57,46 @@
           hide-details
         ></v-text-field>
 
+        <v-card dark v-if="searchResults.length" id="search__card">
+          <v-list nav dense>
+            <v-list-item-group color="primary">
+              <v-list-item
+                v-for="result in searchResults"
+                :key="result._id"
+                @click="goToSearchResult(result._id)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{result.title}} -
+                    <span
+                      class="font-weight-thin"
+                    >{{formatDescription(result.description)}}</span>
+                  </v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-icon v-if="checkIfUserFavorite(result._id)">
+                  <v-icon>mdi-favorite</v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+
+        <v-spacer></v-spacer>
+
         <v-toolbar-items class="hidden-xs-only">
           <v-btn text v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
             <v-icon left class="hidden-sm-only">{{item.icon}}</v-icon>
             {{item.title}}
           </v-btn>
 
-          <v-btn text to="/profile" v-if="user">
-            <v-icon class="hidden-sm-only" left>account_box</v-icon>
-            <v-badge right color="blue darken-2">Profile</v-badge>
+          <v-btn flat to="/profile" v-if="user">
+            <v-icon class="hidden-sm-only" left>mdi-account_box</v-icon>
+
+            <v-badge right color="blue darken-2" :class="{ 'bounce': badgeAnimated }">
+              <span slot="badge" v-if="userFavorites.length">{{userFavorites.length}}</span>
+              Profile
+            </v-badge>
           </v-btn>
 
           <v-btn text v-if="user" @click="handleSignoutUser">
@@ -80,6 +111,27 @@
         <transition name="fade">
           <router-view />
         </transition>
+
+        <v-snackbar v-model="authSnackbar" color="success" :timeout="5000" bottom left>
+          <v-icon class="mr-3">mdi-check_circle</v-icon>
+
+          <h3>You are now signed in!</h3>
+          <v-btn dark flat @click="authSnackbar = false">Close</v-btn>
+        </v-snackbar>
+
+        <v-snackbar
+          v-if="authError"
+          v-model="authErrorSnackbar"
+          color="info"
+          :timeout="5000"
+          bottom
+          left
+        >
+          <v-icon class="mr-3">mdi-cancel</v-icon>
+
+          <h3>{{authError.message}}</h3>
+          <v-btn dark flat to="/signin">Sign in</v-btn>
+        </v-snackbar>
       </v-container>
     </main>
   </v-app>
@@ -92,11 +144,15 @@ export default {
   name: "App",
   data() {
     return {
-      sideNav: false
+      searchTerm: "",
+      sideNav: false,
+      authSnackbar: false,
+      authErrorSnackbar: false,
+      badgeAnimated: false
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["searchResults", "authError", "user", "userFavorites"]),
     horizontalNavItems() {
       let items = [
         { icon: "mdi-chat", title: "Posts", link: "/posts" },
@@ -107,6 +163,7 @@ export default {
       if (user) {
         items = [{ icon: "mdi-chat", title: "Posts", link: "/posts" }];
       }
+
       return items;
     },
     sideNavItems() {
@@ -123,16 +180,36 @@ export default {
           { icon: "mdi-account_box", title: "Profile", link: "/profile" }
         ];
       }
+
       return items;
     }
   },
   methods: {
-    toggleSideNav() {
-      this.sideNav = !this.sideNav;
+    handleSearchPosts() {
+      this.$store.dispatch("searchPosts", {
+        searchTerm: this.searchTerm
+      });
     },
     handleSignoutUser() {
       this.$store.dispatch("signoutUser");
     },
+    goToSearchResult(resultId) {
+      this.searchTerm = "";
+      this.$router.push(`/posts/${resultId}`);
+      this.$store.commit("clearSearchResults");
+    },
+    formatDescription(desc) {
+      return desc.length > 30 ? `${desc.slice(0, 30)}...` : desc;
+    },
+    checkIfUserFavorite(resultId) {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === resultId)
+      );
+    },
+    toggleSideNav() {
+      this.sideNav = !this.sideNav;
+    }
   }
 };
 </script>
@@ -141,15 +218,47 @@ export default {
 .fade-enter-active,
 .fade-leave-active {
   transition-property: opacity;
-  transition-duration: 0.3s;
+  transition-duration: 0.25s;
 }
 
 .fade-enter-active {
-  transition-delay: 0.3s;
+  transition-delay: 0.25s;
 }
 
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+#search__card {
+  left: 0%;
+  position: absolute;
+  top: 100%;
+  width: 100vw;
+  z-index: 8;
+}
+
+.bounce {
+  animation: bounce 1s both;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -20px, 0);
+  }
+  70% {
+    transform: translate3d(0, -10px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
 }
 </style>

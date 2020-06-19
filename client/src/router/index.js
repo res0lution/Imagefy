@@ -4,17 +4,17 @@ import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
 import Profile from "../components/auth/Profile.vue";
 import Posts from "../components/post/Posts.vue";
-import AddPosts from "../components/post/AddPost.vue";
+import AddPost from "../components/post/AddPost.vue";
 import Signin from "../components/auth/Signin.vue";
 import Signup from "../components/auth/Signup.vue";
 import AuthGuard from "../utils/AuthGuard";
 
 Vue.use(VueRouter);
 
-const routes = [
+routes: [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home,
   },
   {
@@ -23,9 +23,22 @@ const routes = [
     component: Posts,
   },
   {
+    path: "/posts/:postId",
+    name: "Post",
+    component: Post,
+    props: true,
+  },
+  {
     path: "/post/add",
-    name: "AddPosts",
-    component: AddPosts,
+    name: "AddPost",
+    component: AddPost,
+    beforeEnter: AuthGuard,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    beforeEnter: AuthGuard,
   },
   {
     path: "/signin",
@@ -33,15 +46,9 @@ const routes = [
     component: Signin,
   },
   {
-    path: "/signup",
-    name: "Singup",
+    path: "/Signup",
+    name: "Signup",
     component: Signup,
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
-    beforeEnter: AuthGuard,
   },
 ];
 
