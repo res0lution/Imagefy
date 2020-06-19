@@ -3,27 +3,22 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
-
-// Import typeDefs and resolvers
 const filePath = path.join(__dirname, "typeDefs.gql");
 const typeDefs = fs.readFileSync(filePath, "utf-8");
-const resolvers = require("./resolvers");
+require("dotenv").config({path: "./.env"});
 
-// Import Environment Variables and Mongoose Models
-require("dotenv").config({ path: "variables.env" });
+const resolvers = require("./resolvers");
 const User = require("./models/User");
 const Post = require("./models/Post");
 
-// Connect to MLab Database
 mongoose
   .connect(
     process.env.MONGO_URI,
     { useNewUrlParser: true }
   )
-  .then(() => console.log("DB connected"))
-  .catch(err => console.error(err));
+  .then(() => console.log("-[INFO] Connected to Db."))
+  .catch(err => console.error(`-[ERROR]! Could not connect to db! ${err}`));
 
-// Verify JWT Token passed from client
 const getUser = async token => {
   if (token) {
     try {
@@ -36,7 +31,6 @@ const getUser = async token => {
   }
 };
 
-// Create Apollo/GraphQL Server using typeDefs, resolvers, and context object
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -51,5 +45,5 @@ const server = new ApolloServer({
 });
 
 server.listen().then(({ url }) => {
-  console.log(`Server listening on ${url}`);
+  console.log(`Alive on ${url}`);
 });
